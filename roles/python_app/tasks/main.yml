@@ -4,22 +4,10 @@
     name: python3-pip
     state: present
 
-- name: Install Flask
-  become: true
-  pip:
-    name: flask
-    state: present
-
 - name: Ensure Python3 venv is installed
   become: true
   apt:
     name: python3-venv
-    state: present
-
-- name: Ensure gunicorn is installed
-  become: true
-  pip:
-    name: gunicorn
     state: present
 
 - name: Create deployment directory
@@ -32,6 +20,18 @@
   command: python3 -m venv venv
   args:
     chdir: "{{ deploy_path }}"
+
+- name: Install Flask
+  become: true
+  pip:
+    name: flask
+    state: present
+    
+- name: Ensure gunicorn is installed
+  become: true
+  pip:
+    name: gunicorn
+    state: present
 
 - name: Copy application wheel file
   copy:
