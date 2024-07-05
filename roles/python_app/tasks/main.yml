@@ -1,0 +1,87 @@
+- name: Ensure pip is installed
+  become: true
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Install Flask
+  become: true
+  pip:
+    name: flask
+    state: present
+
+- name: Ensure Python3 venv is installed
+  become: true
+  apt:
+    name: python3-venv
+    state: present
+
+- name: Ensure gunicorn is installed
+  become: true
+  pip:
+    name: gunicorn
+    state: present
+
+- name: Create deployment directory
+  file:
+    path: "{{ deploy_path }}"
+    state: directory
+    mode: 0755
+
+- name: Create virtual environment
+  command: python3 -m venv venv
+  args:
+    chdir: "{{ deploy_path }}"
+
+- name: Copy application wheel file
+  copy:
+    src: "{{ wheel_file }}"
+    dest: "{{ deploy_path }}"
+
+- name: Install application
+  pip:
+    name: "{{ deploy_path }}/{{ wheel_file }}"
+    virtualenv: "{{ deploy_path }}/venv"
+
+- name: Create instance directory
+  file:
+    path: "{{ instance_path }}"
+    state: directory
+    mode: 0755
+
+- name: Deploy application file
+  copy:
+    src: app.py
+    dest: "{{ deploy_path }}/app.py"
+    mode: 0644
+
+- name: Deploy config.py
+  template:
+    src: config.py.j2
+    dest: "{{ instance_path }}/config.py"
+    mode: 0644
+
+- name: Deploy run.sh
+  template:
+    src: run.sh.j2
+    dest: "{{ deploy_path }}/run.sh"
+    mode: 0755
+
+- name: Deploy systemd service file for Example Flask Application
+  template:
+    src: example.service.j2
+    dest: /etc/systemd/system/example.service
+    mode: 0644
+  notify:
+    - Restart example service
+    
+- name: Start and enable example service
+  systemd:
+    name: example
+    enabled: yes
+    state: started
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+

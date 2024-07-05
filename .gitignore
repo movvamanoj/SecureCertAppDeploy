@@ -1,0 +1,15 @@
+# Ignore compiled Python files
+*.pyc
+
+# Ignore virtual environment
+venv/
+
+# Ignore logs and other runtime data
+logs/
+*.log
+
+# Ignore sensitive or generated files
+# group_vars/secrets.yml
+
+# Ignore system-specific files
+.DS_Store

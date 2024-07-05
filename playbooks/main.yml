@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  become: true
+
+  roles:
+    - role: roles/ca_certificates
+    - role: roles/python_app

@@ -1,0 +1,16 @@
+---
+- name: Install standard CA certificates
+  package:
+    name: ca-certificates
+    state: present
+
+- name: Install custom CA certificates
+  copy:
+    src: "{{ item }}"
+    dest: /usr/local/share/ca-certificates/
+    mode: 0644
+  with_fileglob:
+    - roles/ca_certificates/files/*.crt
+
+- name: Update CA certificates
+  command: update-ca-certificates

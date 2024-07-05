@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DEPLOYMENT_FOLDER='{{ deploy_path }}'
+
+source $DEPLOYMENT_FOLDER/venv/bin/activate
+
+gunicorn app:app --bind {{ app_ip }}:{{ app_port }} --workers 2 --threads 2
