@@ -1,87 +1,79 @@
-- name: Ensure pip is installed
+---
+- name: Ensure Python 3 and pip are installed
   become: true
   apt:
-    name: python3-pip
+    name: "{{ item }}"
     state: present
+  with_items: "{{ python_packages }}"
 
-- name: Ensure Python3 venv is installed
+- name: Ensure Python 3 venv is installed
   become: true
   apt:
     name: python3-venv
     state: present
 
+- name: Install Flask and Gunicorn in virtual environment
+  pip:
+    name: "{{ item }}"
+    virtualenv: "{{ python_app_venv_path }}"
+    state: present
+  with_items: "{{ python_app_packages }}"
+  
 - name: Create deployment directory
   file:
-    path: "{{ deploy_path }}"
+    path: "{{ python_app_deployment_folder }}"
     state: directory
     mode: 0755
 
 - name: Create virtual environment
-  command: python3 -m venv venv
+  command: python3 -m venv "{{ python_app_venv_path }}"
   args:
-    chdir: "{{ deploy_path }}"
-
-- name: Install Flask
-  become: true
-  pip:
-    name: flask
-    state: present
-    
-- name: Ensure gunicorn is installed
-  become: true
-  pip:
-    name: gunicorn
-    state: present
+    chdir: "{{ python_app_deployment_folder }}"
 
 - name: Copy application wheel file
   copy:
-    src: "{{ wheel_file }}"
-    dest: "{{ deploy_path }}"
+    src: "{{ python_app_wheel_path }}"
+    dest: "{{ python_app_deployment_folder }}"
+    mode: 0644
 
-- name: Install application
+- name: Install application dependencies in virtual environment
   pip:
-    name: "{{ deploy_path }}/{{ wheel_file }}"
-    virtualenv: "{{ deploy_path }}/venv"
+    name: "{{ python_app_deployment_folder }}/{{ python_app_wheel_name }}"
+    virtualenv: "{{ python_app_venv_path }}"
+    state: present
 
-- name: Create instance directory
+- name: Create instance folder for application configurations
   file:
-    path: "{{ instance_path }}"
+    path: "{{ python_app_instance_folder }}"
     state: directory
     mode: 0755
 
-- name: Deploy application file
-  copy:
-    src: app.py
-    dest: "{{ deploy_path }}/app.py"
-    mode: 0644
-
-- name: Deploy config.py
+- name: Deploy application configuration file
   template:
-    src: config.py.j2
-    dest: "{{ instance_path }}/config.py"
-    mode: 0644
+    src: "{{ python_app_config_template }}"
+    dest: "{{ python_app_instance_folder }}/config.py"
+    mode: 0644  
 
-- name: Deploy run.sh
+- name: Deploy run.sh script
   template:
-    src: run.sh.j2
-    dest: "{{ deploy_path }}/run.sh"
+    src: "{{ python_app_run_script_template }}"
+    dest: "{{ python_app_deployment_folder }}/run.sh"
     mode: 0755
 
-- name: Deploy systemd service file for Example Flask Application
+- name: Create systemd service file for the application
   template:
-    src: example.service.j2
-    dest: /etc/systemd/system/example.service
+    src: "{{ python_app_service_template }}"
+    dest: "/etc/systemd/system/{{ python_app_service_name }}.service"
     mode: 0644
-  notify:
-    - Restart example service
-    
-- name: Start and enable example service
+  notify: 
+    - Start and enable the application service
+
+- name: Start and enable the application service
   systemd:
-    name: example
+    name: "{{ python_app_service_name }}"
     enabled: yes
     state: started
 
-- name: Reload systemd
+- name: Reload systemd for changes to take effect
   systemd:
     daemon_reload: yes
-

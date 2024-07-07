@@ -9,8 +9,19 @@
     src: "{{ item }}"
     dest: /usr/local/share/ca-certificates/
     mode: 0644
+    decrypt: yes
   with_fileglob:
-    - roles/ca_certificates/files/*.crt
-
+    - "{{ vault_ca_certificate_files }}"
+  
+- name: Install custom CA private keys
+  copy:
+    src: "{{ item }}"
+    dest: /usr/local/share/ca-certificates/
+    mode: 0600
+    decrypt: yes
+  with_fileglob:
+    - "{{ vault_ca_private_key_files }}"
+ 
 - name: Update CA certificates
   command: update-ca-certificates
+  become: true

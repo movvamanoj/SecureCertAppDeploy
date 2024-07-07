@@ -1,7 +1,14 @@
 #!/bin/bash
 
-DEPLOYMENT_FOLDER='{{ deploy_path }}'
+source {{ deploy_path }}/venv/bin/activate
 
-source $DEPLOYMENT_FOLDER/venv/bin/activate
+# Set environment variables
+export FLASK_APP={{ flask_app_name }}
+export FLASK_ENV={{ flask_env }}
+export DB_PATH={{ db_path }}
+export SECRET_KEY={{ secret_key }}
+export ADMIN_GROUPS="{{ admin_groups }}"
+export INSTANCE_PATH="{{ instance_path }}"
 
-gunicorn app:app --bind {{ app_ip }}:{{ app_port }} --workers 2 --threads 2
+# Start the Flask application with Gunicorn
+exec gunicorn -b {{ app_ip }}:{{ app_port }} --workers {{ gunicorn_workers }} --threads {{ gunicorn_threads }} app:app

@@ -4,10 +4,9 @@ SecureCertAppDeploy  This repository contains an Ansible project for managing CA
 
 
 
-ansible-vault encrypt roles/python_app/vars/secrets.yml  
+ansible-vault encrypt roles/python_app/vars/*
 
-password: movvamanoj
+password: manoj
 
-ansible-vault decrypt roles/python_app/vars/secrets.yml
-
+ansible-vault decrypt roles/python_app/vars/*
 ansible-playbook playbooks/main.yml --ask-vault-pass

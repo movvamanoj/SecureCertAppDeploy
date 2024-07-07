@@ -1,0 +1,47 @@
+# Python application settings
+python_app_flask_package: flask
+python_app_gunicorn_package: gunicorn
+python_app_wheel_name: Example-1.1.1-py3-none-any.whl
+python_app_wheel_path: "{{ python_app_wheel_name }}"
+
+
+# Packages to install
+python_packages:
+  - python3
+  - python3-pip
+
+python_app_packages:
+  - flask
+  - gunicorn
+
+# Flask application environment variables
+flask_app_name: example
+flask_env: production
+gunicorn_workers: 2
+gunicorn_threads: 2
+
+# Paths and directories
+python_app_deployment_folder: /opt/example
+python_app_instance_folder: "{{ python_app_deployment_folder }}/instance"
+python_app_venv_path: "{{ python_app_deployment_folder }}/venv"
+
+# Configurations
+python_app_config_template: config.py.j2
+python_app_run_script_template: run.sh.j2
+python_app_service_template: example.service.j2
+python_app_service_name: example
+
+# Application-specific variables
+app_ip: 0.0.0.0 #127.0.0.1  #This ensures Gunicorn listens on all interfaces (0.0.0.0).
+app_port: 5000
+
+# System and environment variables
+user: root
+deploy_path: "{{ python_app_deployment_folder }}"
+instance_path: "{{ python_app_instance_folder }}"
+service_name: "{{ python_app_service_name }}"
+
+# Secrets and sensitive information (to be retrieved from Ansible Vault)
+db_path: "{{ lookup('vault', 'secret/ansible/db_path') }}"
+secret_key: "{{ lookup('vault', 'secret/ansible/secret_key') }}"
+admin_groups: "{{ lookup('vault', 'secret/ansible/admin_groups') }}"

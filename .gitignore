@@ -1,15 +1,59 @@
-# Ignore compiled Python files
-*.pyc
+# Ignore Ansible Vault password file # chmod 600 vault_password_file.txt # This give access to current user
 
-# Ignore virtual environment
-venv/
+# vault_password_file.txt
 
-# Ignore logs and other runtime data
-logs/
-*.log
+# # Ignore sensitive vault files
+# vault/secrets.yml
+# vault/ca_certificates/
 
-# Ignore sensitive or generated files
-# group_vars/secrets.yml
 
-# Ignore system-specific files
-.DS_Store
+# # Ignore Python cache files
+# __pycache__/
+# *.py[cod]
+# *.pyo
+# *.pyd
+
+# # # Ignore virtual environments
+# venv/
+# ENV/
+# env/
+# .venv/
+# .ENV/
+# .env/
+
+# # Ignore Ansible logs
+# *.log
+
+# # Ignore configuration files
+# *.ini
+# *.cfg
+
+# # Ignore specific temporary files
+# *.tmp
+# *.swp
+
+# # Ignore deployment artifacts
+# *.tar.gz
+# *.zip
+# *.whl
+
+# # Ignore IDE and editor specific files
+# .vscode/
+# .idea/
+# *.iml
+# *.sublime-project
+# *.sublime-workspace
+
+# # Ignore system files
+# .DS_Store
+# Thumbs.db
+
+# # Ignore compiled code
+# *.o
+# *.so
+# *.a
+# *.out
+
+# # Ignore additional sensitive files
+# *.crt
+# *.key
