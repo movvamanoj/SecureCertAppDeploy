@@ -1,5 +1,5 @@
 # vault_ca_certificate_files: "{{ lookup('vault', '/mnt/l/projects/SecureCertAppDeploy/vault/*.crt') }}"
 #vault_ca_private_key_files: "{{ lookup('vault', 'secret/ansible/ca_certificates/*.key') }}"
 
-vault_ca_certificate_files: "{{ lookup('fileglob', 'vault/*.crt') }}"
-vault_ca_private_key_files: "{{ lookup('fileglob', 'vault/*.key') }}"
+vault_ca_certificate_files: "{{ lookup('fileglob', './vault/*.crt') }}"
+vault_ca_private_key_files: "{{ lookup('fileglob', './vault/*.key') }}"

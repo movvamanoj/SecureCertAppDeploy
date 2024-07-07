@@ -42,6 +42,6 @@ instance_path: "{{ python_app_instance_folder }}"
 service_name: "{{ python_app_service_name }}"
 
 # Secrets and sensitive information (to be retrieved from Ansible Vault)
-db_path: "{{ lookup('vault', 'vault/db_path') }}"
-secret_key: "{{ lookup('vault', 'vault/secret_key') }}"
-admin_groups: "{{ lookup('vault', 'vault/admin_groups') }}"
+db_path: "{{ lookup('vault', './vault/db_path') }}"
+secret_key: "{{ lookup('vault', './vault/secret_key') }}"
+admin_groups: "{{ lookup('vault', './vault/admin_groups') }}"
