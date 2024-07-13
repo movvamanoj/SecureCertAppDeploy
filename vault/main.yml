@@ -1,0 +1,6 @@
+# - name: Include all encrypted variables from vault/hideme
+#   include_vars:
+#     dir: hideme
+#     files_matching: "*.yml"
+
+

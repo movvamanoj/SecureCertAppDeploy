@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  become: true
+
+  tasks:
+  - name: Include project vault main.yml
+    include_tasks: /mnt/l/projects/SecureCertAppDeploy/vault/main.yml   
+
+  - name: Task using secret_key from secrets.yml
+    debug:
+      msg: "Secret Key is {{ secrets.secret_key }}"

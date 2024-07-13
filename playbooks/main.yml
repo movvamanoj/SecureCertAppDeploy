@@ -1,7 +1,6 @@
 ---
-- hosts: localhost
+- hosts: localhost  # Target localhost (or replace with your desired hosts)
   become: true
-
   roles:
     - role: roles/ca_certificates
     - role: roles/python_app

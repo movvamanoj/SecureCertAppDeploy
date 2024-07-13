@@ -1,4 +1,8 @@
 ---
+- name: Display secret_key from variables
+  debug:
+    msg: "Secret Key is {{ secret_key }}"
+
 - name: Ensure Python 3 and pip are installed
   become: true
   apt:
